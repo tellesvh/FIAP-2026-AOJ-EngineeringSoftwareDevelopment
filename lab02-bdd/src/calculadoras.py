@@ -14,6 +14,10 @@ class DescontoPremium(CalculadoraDesconto):
 class DescontoComum(CalculadoraDesconto):
     def calcular(self, valor: float) -> float: return valor * 0.95
 
+class DescontoInadimplente(CalculadoraDesconto):
+    def calcular(self, valor: float) -> float: 
+        return valor * 1.00 # Paga 100%, sem desconto
+
 # --- ESTRATÉGIAS DE FRETE ---
 class CalculadoraFrete(ABC):
     @abstractmethod
@@ -21,6 +25,10 @@ class CalculadoraFrete(ABC):
 
 class FreteNorte(CalculadoraFrete):
     def calcular(self) -> float: return 50.0
+
+class FreteNorteInadimplente(CalculadoraFrete):
+    def calcular(self) -> float: 
+        return 100.0 # O dobro do normal (50.0)
 
 class FreteNordeste(CalculadoraFrete):
     def calcular(self) -> float: return 40.0
@@ -34,10 +42,12 @@ class FretePadrao(CalculadoraFrete):
 # --- CLASSE PRINCIPAL REFATORADA ---
 class CalculadoraDeEnergia:
     def calcular_total(self, valor_base: float, tipo_cliente: str, regiao: str) -> float:
+        
         estrategias_desconto = {
             "vip": DescontoVIP(),
             "premium": DescontoPremium(),
-            "comum": DescontoComum()
+            "comum": DescontoComum(),
+            "inadimplente": DescontoInadimplente() # Nova Regra
         }
         
         estrategias_frete = {
@@ -46,8 +56,13 @@ class CalculadoraDeEnergia:
             "sul": FreteSul()
         }
 
+        # Nova Regra Composta: Inadimplente no Norte
+        if tipo_cliente == "inadimplente" and regiao == "norte":
+            estrategia_frete = FreteNorteInadimplente()
+        else:
+            estrategia_frete = estrategias_frete.get(regiao, FretePadrao())
+
         estrategia_desconto = estrategias_desconto.get(tipo_cliente, DescontoComum())
-        estrategia_frete = estrategias_frete.get(regiao, FretePadrao())
         
         valor_com_desconto = estrategia_desconto.calcular(valor_base)
         valor_frete = estrategia_frete.calcular()
