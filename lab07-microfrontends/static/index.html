@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loja Frankenstein - Micro Frontends</title>
+    <style>
+        body { font-family: sans-serif; display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding: 20px; background: #f0f0f0; }
+        .fragment { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; color: #333; }
+        .product { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        button { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .cart-item { font-size: 0.9em; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div id="catalogo-container" class="fragment">
+        <h2>🚀 Vitrine de Produtos</h2>
+        <div id="vitrine-list">Carregando produtos...</div>
+    </div>
+    <div id="carrinho-container" class="fragment">
+        <h2>🛒 Meu Carrinho</h2>
+        <div id="cart-list">Vazio</div>
+        <hr>
+        <strong>Total: R$ <span id="cart-total">0.00</span></strong>
+    </div>
+    <script src="/static/catalogo.js"></script>
+    <script src="/static/carrinho.js"></script>
+</body>
+</html>
