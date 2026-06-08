@@ -11,3 +11,13 @@ function updateCartUI() {
     totalEl.innerText = cart.total.toFixed(2);
 }
 updateCartUI();
+
+// O Carrinho é independente. Ele apenas escuta o 'cart:add'
+window.addEventListener('cart:add', (e) => {
+    const { nome, preco } = e.detail;
+    console.log(`[CARRINHO] Recebi notificação de adição: ${nome}`);
+    
+    cart.items.push({ nome, preco });
+    cart.total += preco;
+    updateCartUI();
+});
